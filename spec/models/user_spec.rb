@@ -15,6 +15,13 @@ describe "A user" do
     expect(user.errors[:email].any?).to be_true
   end
   
+  it "requires a username" do
+    user = User.new(username: "")
+    
+    expect(user.valid?).to be_false
+    expect(user.errors[:username].any?).to be_true
+  end
+ 
   it "accepts properly formatted email addresses" do
     emails = %w[user@example.com first.last@example.com]
     emails.each do |email|
@@ -41,6 +48,14 @@ describe "A user" do
     user2 = User.new(email: user1.email.upcase)
     expect(user2.valid?).to be_false
     expect(user2.errors[:email].first).to eq("has already been taken")
+  end
+  
+  it "requires a unique, case insensitive username" do
+    user1 = User.create!(user_attributes)
+    
+    user2 = User.new(username: user1.username.upcase)
+    expect(user2.valid?).to be_false
+    expect(user2.errors[:username].first).to eq("has already been taken")
   end
   
   it "is valid with example attributes" do
