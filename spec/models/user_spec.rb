@@ -1,5 +1,5 @@
 require 'spec_helper'
-
+# Spec for User
 describe "A user" do
   it "requires a name" do
     user = User.new(name: "")
